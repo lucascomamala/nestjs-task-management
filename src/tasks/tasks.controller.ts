@@ -24,16 +24,22 @@ import { User } from 'src/auth/user.entity'
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
+  // Get all tasks
   @Get()
-  getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
-    return this.tasksService.getTasks(filterDto)
+  getTasks(
+    @Query() filterDto: GetTasksFilterDto,
+    @GetUser() user: User,
+  ): Promise<Task[]> {
+    return this.tasksService.getTasks(filterDto, user)
   }
 
+  // Get task by id
   @Get('/:id')
   getTaskById(@Param('id') id: string): Promise<Task> {
     return this.tasksService.getTaskById(id)
   }
 
+  // Create task
   @Post()
   createTask(
     @Body() createTaskDto: CreateTaskDto,
@@ -42,11 +48,13 @@ export class TasksController {
     return this.tasksService.createTask(createTaskDto, user)
   }
 
+  // Delete task
   @Delete('/:id')
   deleteTask(@Param('id') id: string): Promise<void> {
     return this.tasksService.deleteTask(id)
   }
 
+  // Update task status
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
