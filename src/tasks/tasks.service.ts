@@ -15,7 +15,6 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
     const { status, search } = filterDto
 
