@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common'
@@ -16,6 +17,7 @@ import { JwtPayload } from './jwt-payload.interface'
 
 @Injectable()
 export class AuthService {
+  private logger = new Logger('AuthService', { timestamp: true })
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -41,6 +43,12 @@ export class AuthService {
       if (error.code === '23505') {
         throw new ConflictException('Username already exists')
       } else {
+        this.logger.error(
+          `Failed to create user "${username}". Data: ${JSON.stringify(
+            authCredentialsDto,
+          )}`,
+          error.stack,
+        )
         throw new InternalServerErrorException()
       }
     }
