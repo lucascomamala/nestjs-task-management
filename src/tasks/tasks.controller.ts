@@ -11,6 +11,7 @@ import {
   Logger,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
+import { ConfigService } from '@nestjs/config'
 
 import { Task } from './task.entity'
 import { TasksService } from './tasks.service'
@@ -24,7 +25,10 @@ import { User } from 'src/auth/user.entity'
 @UseGuards(AuthGuard())
 export class TasksController {
   private logger = new Logger('TasksController', { timestamp: true })
-  constructor(private tasksService: TasksService) {}
+  constructor(
+    private tasksService: TasksService,
+    private configService: ConfigService,
+  ) {}
 
   // Get all tasks
   @Get()
